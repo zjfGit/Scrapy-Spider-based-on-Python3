@@ -32,7 +32,7 @@ def post_handel(url):
             cs.append(cs_json)
 
     strcs = json.dumps(cs)
-    json_data = {"apisign": "99ea3eda4b45549162c4a741d58baa60",
+    json_data = {"apisign": "99ea3eda4b4554adag2c4a741d58baa60",
                  "user_id": user_id,
                  "gid": gid,
                  "t": title,
@@ -42,6 +42,4 @@ def post_handel(url):
 
     # 更新状态2，成功上传帖子
     result_updateresult = dbhandle_update_status(url, 2)
-#
-# if __name__ == '__main__':
-#     post_handel('http://www.mama.cn/baby/art/20140523/773474.html')
+
