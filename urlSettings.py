@@ -4,13 +4,9 @@
 DOMAIN = 'eastlady.cn'
 
 # 爬虫名
-""" URL爬虫模块名，不可变 """
 SPIDER_NAME = 'DgUrlSpider'
 
-# 减肥瘦身
 GROUP_ID = '33'
-# 情感生活
-# GROUP_ID = '30'
 
 MODULE = '999'
 
@@ -24,9 +20,4 @@ LIST_URL_RULER_LOOP = 30
 
 # 文章URL爬取规则XPATH
 POST_URL_XPATH = '//div[@class="article_list"]/ul/li/span[1]/a[last()]/@href'
-#
-#
-# def __init__():
-#     print("=========== Stat urlSettings.py INIT() ===========")
-
 
