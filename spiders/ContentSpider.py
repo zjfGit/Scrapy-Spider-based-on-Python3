@@ -21,15 +21,12 @@ class DgContentSpider(scrapy.Spider):
     gid = result[3]
     module = result[4]
 
-    # 爬虫名 必须静态指定
-    # name = contentSettings.SPIDER_NAME
     name = 'DgContentSpider'
 
     # 设定爬取域名范围
     allowed_domains = [site]
 
     # 爬取地址
-    # start_urls = ['http://www.mama.cn/baby/art/20140829/774422.html']
     start_urls = [url]
 
     start_urls_tmp = []
@@ -62,44 +59,3 @@ class DgContentSpider(scrapy.Spider):
         if self.start_urls_tmp:
             url = self.start_urls_tmp.pop()
             yield Request(url, callback=self.parse)
-
-    # def start_requests(self):
-    #     pages = []
-    #     gid = contentSettings.GROUP_ID
-    #     url_tmp = dbhandle_geturl(gid)
-    #     start_single = url_tmp[:-5]
-    #     print("=========== START URL ============")
-    #     pages.append(url_tmp)
-    #     for i in range(1, 10):
-    #         url = start_single+"_"+str(i)+".html"
-    #         # url='http://www.example.com/?page=%s'%i
-    #         print(url)
-    #         page = scrapy.Request(url)
-    #         pages.append(page)
-    #     return pages
-
-    # init: 动态传入参数
-    """命令行传参写法：  scrapy crawl MySpider -a start_url="http://www.lifeskill.cn/Html_qz_huaiyun/2015/2015072724958.shtml"""
-    """
-    def __init__(self,*args,**kwargs):
-        super(DgPostSpider,self).__init__(*args,**kwargs)
-        self.start_urls.append(kwargs.get('start_url'))
-        for i in range(1, 6):
-            start_single_tmp = kwargs.get('start_url')
-            start_single = start_single_tmp[:-5]
-            self.start_urls.append(start_single+"_"+str(i)+".html")
-        print("=========ALL PAGES==========")
-        print(self.start_urls)
-        # self.start_urls = [kwargs.get('start_url')]
-    """
-
-    """此网站不存在翻页，方法废弃
-    def getUrl(self, response):
-        url_list = []
-        select = Selector(response)
-        page_list_tmp = select.xpath('//div[@class="viewnewpages"]/a[not(@class="next")]/@href').extract()
-        for page_tmp in page_list_tmp:
-            if page_tmp not in url_list:
-                url_list.append("http://www.nvsheng.com/emotion/px/" + page_tmp)
-        return url_list
-    """
