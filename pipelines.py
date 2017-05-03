@@ -70,6 +70,7 @@ class DgPipeline(object):
                 # 使用beautifulSoup格什化标题
                 soup_title = BeautifulSoup(title_tmp, "lxml")
                 title = ''
+                
                 # 对于bs之后的html树形结构，不使用.prettify()，对于bs, prettify后每一个标签自动换行，造成多个、
                 # 多行的空格、换行，使用stripped_strings获取文本
                 for string in soup_title.stripped_strings:
@@ -90,7 +91,6 @@ class DgPipeline(object):
             for img in imgs:
                 DgPipeline.has_img = 1
 
-                # matchObj = re.search('.*src="(.*)"{2}.*', img, re.M | re.I)
                 match_obj = re.search('.*src="(.*)".*', img, re.M | re.I)
                 img_url_tmp = match_obj.group(1)
 
@@ -107,14 +107,13 @@ class DgPipeline(object):
                 list_name = imgUrl.split('/')
                 file_name = list_name[len(list_name)-1]
 
-                # if os.path.exists(settings.IMAGES_STORE):
-                #     os.makedirs(settings.IMAGES_STORE)
-
                 # 获取图片本地存储路径
                 file_path = contentSettings.IMAGES_STORE + file_name
+                
                 # 获取图片并上传至本地
                 urllib.request.urlretrieve(imgUrl, file_path)
                 upload_img_result_json = uploadImage(file_path, 'image/jpeg', DgPipeline.user_id)
+                
                 # 获取上传之后返回的服务器图片路径、宽、高
                 img_u = upload_img_result_json['result']['image_url']
                 img_w = upload_img_result_json['result']['w']
@@ -127,20 +126,11 @@ class DgPipeline(object):
             # 使用beautifulSoup格什化HTML
             soup = BeautifulSoup(text_temp, "lxml")
             text = ''
+            
             # 对于bs之后的html树形结构，不使用.prettify()，对于bs, prettify后每一个标签自动换行，造成多个、
             # 多行的空格、换行
             for string in soup.stripped_strings:
                 text += string + '\n'
-
-            # 替换所有br符
-            # strCpla = re.compile(r'<br[.]+>', re.S | re.I)
-            # text = strCpla.sub('', text).replace("'", "")
-            # text = text.replace('<br>', '\n').replace('<BR>', '\n').replace('<br/>', '\n').replace('<BR/>', '\n')
-            # .replace('<br>', '\n')
-
-            # 替换所有HTML标签
-            # strCplb = re.compile(r'<[^>]+>', re.S | re.X)
-            # text = strCplb.sub('', text).replace("'", "")
 
             # 替换因为双引号为中文双引号，避免 mysql syntax
             DgPipeline.text = self.text + text.replace('"', '“')
@@ -164,6 +154,7 @@ class DgPipeline(object):
                 sql = 'insert into dg_spider.dg_spider_post(md5_url, url, spider_name, site, gid, module, status) ' \
                       'values("%s", "%s", "%s", "%s", "%s", "%s", "%s")' \
                       % (linkmd5id, url, spider_name, site, gid, module, status)
+                        
                 try:
                     # 判断url是否存在,如果不存在，则插入
                     cursor.execute(sql_search)
@@ -192,10 +183,6 @@ class DgPipeline(object):
             content = DgPipeline.text
             user_id = DgPipeline.user_id
             dbhandle_insert_content(url, title, content, user_id, DgPipeline.has_img)
-
-            # 更新status状态为1（已经爬取过内容）
-            """此项已在spider启动时设置"""
-            # dbhandle_update_status(url, 1)
 
             # 处理文本、设置status、上传至dgCommunity.dg_post
             # 如果判断has_img为1，那么上传帖子
